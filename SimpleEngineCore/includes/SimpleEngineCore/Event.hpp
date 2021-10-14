@@ -2,6 +2,8 @@
 #define EVENT_HPP
 #include "Types.hpp"
 #include <functional>
+#include <array>
+
 namespace SimpleEngine {
 
 enum class EventType
