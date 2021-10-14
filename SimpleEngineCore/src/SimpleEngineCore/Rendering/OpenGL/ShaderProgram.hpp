@@ -1,7 +1,6 @@
 #ifndef SHADER_PROGRAM_HPP
 #define SHADER_PROGRAM_HPP
-//#include "SimpleEngineCore/Types.hpp"
-#include "../../../../../SimpleEngineCore/includes/SimpleEngineCore/Types.hpp"
+#include "SimpleEngineCore/Types.hpp"
 
 namespace SimpleEngine {
 

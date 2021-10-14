@@ -1,6 +1,6 @@
 #ifndef CAMERA_HPP
 #define CAMERA_HPP
-#include "../../../../../SimpleEngineCore/includes/SimpleEngineCore/Types.hpp"
+#include "SimpleEngineCore/Types.hpp"
 #include "ShaderProgram.hpp"
 
 namespace SimpleEngine {

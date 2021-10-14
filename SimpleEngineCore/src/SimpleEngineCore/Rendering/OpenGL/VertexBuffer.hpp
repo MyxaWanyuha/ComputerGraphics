@@ -1,7 +1,7 @@
 #ifndef VERTEX_BUFFER_HPP
 #define VERTEX_BUFFER_HPP
 #include <vector>
-#include "../../../../../SimpleEngineCore/includes/SimpleEngineCore/Types.hpp"
+#include "SimpleEngineCore/Types.hpp"
 
 namespace SimpleEngine {
 

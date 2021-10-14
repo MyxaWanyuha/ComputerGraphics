@@ -1,6 +1,6 @@
 #ifndef INDEX_BUFFER_HPP
 #define INDEX_BUFFER_HPP
-#include "../../../../../SimpleEngineCore/includes/SimpleEngineCore/Types.hpp"
+#include "SimpleEngineCore/Types.hpp"
 #include "VertexBuffer.hpp"
 
 namespace SimpleEngine {

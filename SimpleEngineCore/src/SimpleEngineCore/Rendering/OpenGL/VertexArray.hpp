@@ -1,6 +1,6 @@
 #ifndef VERTEX_ARRAY_HPP
 #define VERTEX_ARRAY_HPP
-#include "../../../../../SimpleEngineCore/includes/SimpleEngineCore/Types.hpp"
+#include "SimpleEngineCore/Types.hpp"
 #include "IndexBuffer.hpp"
 #include "VertexBuffer.hpp"
 
