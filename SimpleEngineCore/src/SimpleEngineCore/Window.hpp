@@ -25,7 +25,7 @@ public:
 
     u32 get_width() const { return m_data.width; }
     u32 get_height() const { return m_data.height; }
-    GLFWwindow* get_window_ptr() const { return m_pWindow; };
+    GLFWwindow* get_window_ptr() const { return m_pWindow; }
     void set_event_callback(const EventCallbackFn& callback)
     {
         m_data.eventCallbackFn = callback;
@@ -50,6 +50,12 @@ private:
     std::unique_ptr<class VertexBuffer> p_positions_colors_vbo;
     std::unique_ptr<class IndexBuffer> p_index_buffer;
     std::unique_ptr<class VertexArray> p_vao;
+
+    std::unique_ptr<class ShaderProgram> p_shader_program2;
+    std::unique_ptr<class VertexBuffer> p_positions_colors_vbo2;
+    std::unique_ptr<class VertexArray> p_vao2;
+    std::unique_ptr<class Cone> p_cone;
+
 };
 
 }

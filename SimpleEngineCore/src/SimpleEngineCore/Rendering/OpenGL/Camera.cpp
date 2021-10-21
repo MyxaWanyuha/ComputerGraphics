@@ -17,7 +17,7 @@ Camera::Camera(Window& w, glm::vec3 position)
 }
 
 void Camera::matrix(float FOVdeg, float nearPlane, float farPlane,
-            ShaderProgram& shaderProgram, const char* uniform)
+            const ShaderProgram& shaderProgram, const char* uniform)
 {
     glm::mat4 view(1.0f);
     glm::mat4 projection(1.0f);
@@ -36,35 +36,35 @@ void Camera::inputs()
 {
     if(glfwGetKey(m_window.get_window_ptr(), GLFW_KEY_W) == GLFW_PRESS)
     {
-        m_position += m_speed * m_orientation;
+        MoveForward();
     }
     if(glfwGetKey(m_window.get_window_ptr(), GLFW_KEY_S) == GLFW_PRESS)
     {
-        m_position += m_speed * -m_orientation;
+        MovaBackward();
     }
     if(glfwGetKey(m_window.get_window_ptr(), GLFW_KEY_A) == GLFW_PRESS)
     {
-        m_position += m_speed * -glm::normalize(glm::cross(m_orientation, m_up));
+        MoveLeft();
     }
     if(glfwGetKey(m_window.get_window_ptr(), GLFW_KEY_D) == GLFW_PRESS)
     {
-        m_position += m_speed * glm::normalize(glm::cross(m_orientation, m_up));
+        MovaRight();
     }
     if(glfwGetKey(m_window.get_window_ptr(), GLFW_KEY_SPACE) == GLFW_PRESS)
     {
-        m_position += m_speed * m_up;
+        MoveUp();
     }
     if(glfwGetKey(m_window.get_window_ptr(), GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
     {
-        m_position += m_speed * -m_up;
+        MoveDown();
     }
     if(glfwGetKey(m_window.get_window_ptr(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
     {
-        m_speed = 0.4f;
+        SetSpeed(0.4f);
     }
     if(glfwGetKey(m_window.get_window_ptr(), GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE)
     {
-        m_speed = 0.1f;
+        SetSpeed(0.1f);
     }
 
     if(glfwGetMouseButton(m_window.get_window_ptr(), GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
@@ -104,6 +104,36 @@ void Camera::inputs()
         glfwSetInputMode(m_window.get_window_ptr(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         m_firstClick = true;
     }
+}
+
+void Camera::MoveForward()
+{
+    m_position += m_speed * m_orientation;
+}
+
+void Camera::MovaBackward()
+{
+    m_position += m_speed * -m_orientation;
+}
+
+void Camera::MoveLeft()
+{
+    m_position += m_speed * -glm::normalize(glm::cross(m_orientation, m_up));
+}
+
+void Camera::MovaRight()
+{
+    m_position += m_speed * glm::normalize(glm::cross(m_orientation, m_up));
+}
+
+void Camera::MoveUp()
+{
+    m_position += m_speed * m_up;
+}
+
+void Camera::MoveDown()
+{
+    m_position += m_speed * -m_up;
 }
 
 }

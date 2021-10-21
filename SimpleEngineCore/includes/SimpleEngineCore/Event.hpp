@@ -94,6 +94,28 @@ struct EventWindowClose : public BaseEvent
     static const EventType type = EventType::WindowClose;
 };
 
+struct EventKey
+{
+    i32 key;
+    i32 scancode;
+    i32 action;
+    i32 mods;
+};
+
+struct EventKeyPressed : public BaseEvent, EventKey
+{
+    virtual EventType get_type() const override { return type; }
+
+    static const EventType type = EventType::KeyPressed;
+};
+
+struct EventKeyReleased : public BaseEvent, EventKey
+{
+    virtual EventType get_type() const override { return type; }
+
+    static const EventType type = EventType::KeyReleased;
+};
+
 }
 
 #endif // EVENT_HPP

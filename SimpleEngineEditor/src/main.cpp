@@ -18,7 +18,7 @@ int main()
 {
     auto myApp = std::make_unique<MyApp>();
 
-    i32 retCode = myApp->start(1024, 768, "TEST APP");
+    i32 retCode = myApp->start(1024, 768, "OpenGL4.6 Rendering");
 
     return retCode;
 }

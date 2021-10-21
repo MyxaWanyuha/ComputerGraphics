@@ -10,8 +10,15 @@ class Camera
 public:
     Camera(class Window& w, glm::vec3 position);
     void matrix(float FOVdeg, float nearPlane, float farPlane,
-                ShaderProgram& shaderProgram, const char* uniform);
+                const ShaderProgram& shaderProgram, const char* uniform);
     void inputs();
+    void SetSpeed(float speed) { m_speed = speed; }
+    void MoveForward();
+    void MovaBackward();
+    void MoveLeft();
+    void MovaRight();
+    void MoveUp();
+    void MoveDown();
 private:
     const Window& m_window;
     glm::vec3 m_position;

@@ -47,6 +47,18 @@ i32 Application::start(u32 window_width, u32 window_height, const char* title)
             m_event_dispatcher.dispatch(event);
         });
 
+    m_event_dispatcher.add_event_listener<EventKeyPressed>(
+        [&](EventKeyPressed& event)
+        {
+            //LOG_INFO("Pressed key {0} | scancode {1} | action {2} | mods {3}", event.key, event.scancode, event.action, event.mods);
+        });
+
+    m_event_dispatcher.add_event_listener<EventKeyReleased>(
+        [&](EventKeyReleased& event)
+        {
+            //LOG_INFO("Released key {0} | scancode {1} | action {2} | mods {3}", event.key, event.scancode, event.action, event.mods);
+        });
+
     while(!m_bCloseWindow)
     {
         m_pWindow->on_update();
