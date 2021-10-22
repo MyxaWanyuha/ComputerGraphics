@@ -55,6 +55,7 @@ private:
     std::unique_ptr<class VertexBuffer> p_positions_colors_vbo2;
     std::unique_ptr<class VertexArray> p_vao2;
     std::unique_ptr<class Cone> p_cone;
+    std::unique_ptr<class Cylinder> p_cylinder;
 
 };
 

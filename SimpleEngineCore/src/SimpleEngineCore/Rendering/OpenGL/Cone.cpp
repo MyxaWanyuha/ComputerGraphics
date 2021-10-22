@@ -40,9 +40,10 @@ Cone::Cone(const GLfloat height, const float r, const float cx, const float cy, 
     m_p_positions_colors_vbo = std::make_unique<VertexBuffer>(
         positionsColors.data(),
         sizeof(positionsColors.data()[0]) * positionsColors.size(),
-        buffer_layout_2_vec3);
+        buffer_layout_2_vec3,
+        VertexBuffer::EUsage::Dynamic);
 
-    m_p_index_buffer = std::make_unique<IndexBuffer>(indices.data(), indices.size());
+    m_p_index_buffer = std::make_unique<IndexBuffer>(indices.data(), indices.size(), VertexBuffer::EUsage::Dynamic);
 
     m_p_vao->add_vertex_buffer(*m_p_positions_colors_vbo);
     m_p_vao->set_index_buffer(*m_p_index_buffer);
@@ -50,6 +51,8 @@ Cone::Cone(const GLfloat height, const float r, const float cx, const float cy, 
 
 void Cone::rotate(glm::vec3 axis, float angle)
 {
+    m_p_vao->enable_vertex_buffer();
+    m_p_vao->set_index_buffer(*m_p_index_buffer);
     rotAngle += angle;
     m_p_shader_program->bind();
     glUniformMatrix4fv(rotationUniformLoc, 1, GL_FALSE,

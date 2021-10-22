@@ -17,6 +17,8 @@ set(ENGINE_PRIVATE_INCLUDES
     src/SimpleEngineCore/Rendering/OpenGL/IndexBuffer.hpp
     src/SimpleEngineCore/Rendering/OpenGL/Camera.hpp
     src/SimpleEngineCore/Rendering/OpenGL/Cone.hpp
+    src/SimpleEngineCore/Rendering/OpenGL/Cylinder.hpp
+    src/SimpleEngineCore/Rendering/OpenGL/Trapezoid.hpp
 )
 
 set(ENGINE_PRIVATE_SOURCE
@@ -29,6 +31,8 @@ set(ENGINE_PRIVATE_SOURCE
     src/SimpleEngineCore/Rendering/OpenGL/IndexBuffer.cpp
     src/SimpleEngineCore/Rendering/OpenGL/Camera.cpp
     src/SimpleEngineCore/Rendering/OpenGL/Cone.cpp
+    src/SimpleEngineCore/Rendering/OpenGL/Cylinder.cpp
+    src/SimpleEngineCore/Rendering/OpenGL/Trapezoid.cpp
 )
 
 set(ENGINE_ALL_SOURCES

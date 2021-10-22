@@ -16,7 +16,8 @@ public:
     VertexArray& operator=(const VertexArray&) = delete;
     VertexArray& operator=(VertexArray&& vertex_buffer) noexcept;
     VertexArray(VertexArray&& vertex_buffer) noexcept;
-
+    
+    void enable_vertex_buffer();
     void add_vertex_buffer(const VertexBuffer& vertex_buffer);
     void set_index_buffer(const IndexBuffer& index_buffer);
     void bind() const;

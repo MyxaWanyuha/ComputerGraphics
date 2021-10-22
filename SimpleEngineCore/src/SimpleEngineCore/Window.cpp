@@ -8,6 +8,7 @@
 
 #include "SimpleEngineCore/Rendering/OpenGL/Camera.hpp"
 #include "SimpleEngineCore/Rendering/OpenGL/Cone.hpp"
+#include "SimpleEngineCore/Rendering/OpenGL/Cylinder.hpp"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -64,16 +65,16 @@ GLfloat cube_positions_colors[] = {
    0.5f,  0.5f, -0.5f,    ColorYellow
   -0.5f,  0.5f, -0.5f,    ColorBlue5
 };
-
+// трапеция, тор, спираль
 GLfloat cube_positions_colors2[] = {
   -1.0f, -1.0f,  1.0f,    ColorRed   //front
-   1.0f, -1.0f,  1.0f,    ColorRed
-   1.0f,  1.0f,  1.0f,    ColorRed
-  -1.0f,  1.0f,  1.0f,    ColorRed
+   1.0f, -1.0f,  1.0f,    ColorBlue
+   1.0f,  1.0f,  1.0f,    ColorOrange
+  -1.0f,  1.0f,  1.0f,    ColorYellow
   -1.0f, -1.0f, -1.0f,    ColorRed  //back
-   1.0f, -1.0f, -1.0f,    ColorRed
-   1.0f,  1.0f, -1.0f,    ColorRed
-  -1.0f,  1.0f, -1.0f,    ColorRed
+   1.0f, -1.0f, -1.0f,    ColorGreen
+   1.0f,  1.0f, -1.0f,    ColorBlue5
+  -1.0f,  1.0f, -1.0f,    ColorWhite
 };
 
 GLuint indices_cube[] = {
@@ -83,22 +84,6 @@ GLuint indices_cube[] = {
 };
 
 i32 DrawType = GL_LINES;
-
-//std::unique_ptr<Cone> p_cone;
-//std::unique_ptr<Cone> p_cone1;
-
-void Rotate(GLfloat* arr, size_t size, glm::vec3 axis = { 1.f,0.f,0.f }, float angle = 0.01f)
-{
-    for (size_t i = 0; i < size; i += 6)
-    {
-        glm::vec4 dot(arr[i], arr[i+1], arr[i+2], 1);
-        dot = glm::rotate(angle, axis) * dot;
-        arr[i] = dot.x;
-        arr[i + 1] = dot.y;
-        arr[i + 2] = dot.z;
-    }
-}
-
 
 std::unique_ptr<Camera> p_camera;
 
@@ -253,24 +238,22 @@ i32 Window::init()
     };
 
     p_camera = std::make_unique<Camera>(*this, glm::vec3(0.0f, 0.0f, 2.0f));
+    {
+        p_vao = std::make_unique<VertexArray>();
+        p_positions_colors_vbo = std::make_unique<VertexBuffer>(cube_positions_colors, sizeof(cube_positions_colors), buffer_layout_2_vec3);
+        p_index_buffer = std::make_unique<IndexBuffer>(indices_cube, sizeof(indices_cube) / sizeof(indices_cube[0]));
+        p_vao->add_vertex_buffer(*p_positions_colors_vbo);
+        p_vao->set_index_buffer(*p_index_buffer);
+    }
 
-    p_vao = std::make_unique<VertexArray>();
-    p_positions_colors_vbo = std::make_unique<VertexBuffer>(
-        cube_positions_colors, sizeof(cube_positions_colors),
-        buffer_layout_2_vec3);
-    p_index_buffer = std::make_unique<IndexBuffer>(
-          indices_cube, sizeof(indices_cube) / sizeof(indices_cube[0]));
-    p_vao->add_vertex_buffer(*p_positions_colors_vbo);
-    p_vao->set_index_buffer(*p_index_buffer);
 
-    p_cone = std::make_unique<Cone>(1.f, 0.5f, 0, 0, 0, 10, glm::vec3{ 0.1, 0.5, 0.7 });
-
-    p_positions_colors_vbo2 = std::make_unique<VertexBuffer>(
-        cube_positions_colors2, sizeof(cube_positions_colors2),
-        buffer_layout_2_vec3);
+    p_positions_colors_vbo2 = std::make_unique<VertexBuffer>(cube_positions_colors2, sizeof(cube_positions_colors2), buffer_layout_2_vec3);
     p_vao2 = std::make_unique<VertexArray>();
     p_vao2->add_vertex_buffer(*p_positions_colors_vbo2);
     p_vao2->set_index_buffer(*p_index_buffer);
+
+    p_cylinder = std::make_unique<Cylinder>(1.f, 0.5f, 0.5f, 0.5f, 0, 10, glm::vec3{ 1, 1, 1 });
+    p_cone = std::make_unique<Cone>(1.f, 0.5f, -0.5f, -0.5f, 0, 10, glm::vec3{ 0.1, 0.5, 0.7 });
     // OpenGL end
 
     return 0;
@@ -296,24 +279,25 @@ void Window::on_update()
 
     angle += 0.01f;
 
-    //p_camera->matrix(45.0f, 0.1f, 100.0f, *p_shader_program, "camMatrix");
-    //p_shader_program->bind();
-    //glUniformMatrix4fv(p_shader_program->get_uniform_location("transform"), 1, GL_FALSE, glm::value_ptr(glm::rotate(angle, glm::vec3{ 1,0,0 })));
-    //p_vao->bind();
-    //glDrawElements(DrawType,
-    //               static_cast<GLsizei>(p_vao->get_indices_count()),
-    //               GL_UNSIGNED_INT,
-    //               nullptr);
-
     p_camera->matrix(45.0f, 0.1f, 100.0f, *p_shader_program2, "camMatrix");
     p_shader_program2->bind();
     glUniformMatrix4fv(p_shader_program2->get_uniform_location("transform"), 1, GL_FALSE, glm::value_ptr(glm::rotate(angle, glm::vec3{ 0,1,0 })));
+    p_vao2->enable_vertex_buffer();
+    p_vao2->set_index_buffer(*p_index_buffer);
     p_vao2->bind();
     glDrawElements(DrawType, static_cast<GLsizei>(p_vao2->get_indices_count()), GL_UNSIGNED_INT, nullptr);
 
-    p_camera->matrix(45.0f, 0.1f, 100.0f, p_cone->getShaderProgram(), "camMatrix");
-    p_cone->rotate(glm::vec3{ 1,1,0 }, 0.01f);
+    if (p_cone)
+    {
+        p_camera->matrix(45.0f, 0.1f, 100.0f, p_cone->getShaderProgram(), "camMatrix");
+        p_cone->rotate(glm::vec3{ 1,1,0 }, 0.01f);
+    }
 
+    if (p_cylinder)
+    {
+        p_camera->matrix(45.0f, 0.1f, 100.0f, p_cylinder->getShaderProgram(), "camMatrix");
+        p_cylinder->rotate_render(glm::vec3{ 1,0,0 }, 0.01f);
+    }
 
     ImGui::End();
     ImGui::Render();
