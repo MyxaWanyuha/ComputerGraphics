@@ -28,7 +28,7 @@ public:
 
 private:
     float rotAngle = 0;
-    void generateCone(const GLfloat height, const float r, const float cx, const float cy, const float cz, const u32 num_segments);
+    void generate(const GLfloat height, const float r, const float cx, const float cy, const float cz, const u32 num_segments);
     std::vector<GLfloat> positionsColors;
     std::vector<GLuint> indices;
     i32 rotationUniformLoc;

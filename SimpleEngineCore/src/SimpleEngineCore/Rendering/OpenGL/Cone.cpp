@@ -31,7 +31,7 @@ void main() {
 Cone::Cone(const GLfloat height, const float r, const float cx, const float cy, const float cz, const u32 num_segments, const glm::vec3& color)
 {
     m_color = color;
-    generateCone(height, r, cx, cy, cz, num_segments);
+    generate(height, r, cx, cy, cz, num_segments);
     m_p_shader_program = std::make_unique<ShaderProgram>(cone_vertex_shader, cone_fragment_shader);
     rotationUniformLoc = m_p_shader_program->get_uniform_location("rotationMatrix");
 
@@ -74,7 +74,7 @@ void Cone::render()
         nullptr);
 }
 
-void Cone::generateCone(const GLfloat height, const float r, const float cx, const float cy, const float cz, const u32 num_segments)
+void Cone::generate(const GLfloat height, const float r, const float cx, const float cy, const float cz, const u32 num_segments)
 {
     positionsColors.resize((num_segments + 2) * 6);
     indices.resize(num_segments * 6);
