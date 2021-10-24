@@ -10,6 +10,7 @@
 #include "SimpleEngineCore/Rendering/OpenGL/Cone.hpp"
 #include "SimpleEngineCore/Rendering/OpenGL/Cylinder.hpp"
 #include "SimpleEngineCore/Rendering/OpenGL/Trapezoid.hpp"
+#include "SimpleEngineCore/Rendering/OpenGL/Torus.hpp"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -254,8 +255,9 @@ i32 Window::init()
     p_vao2->set_index_buffer(*p_index_buffer);
 
     p_cylinder = std::make_unique<Cylinder>(1.f, 0.5f, 0.5f, 0.5f, 0, 10, glm::vec3{ 1, 1, 1 });
-    p_trapezoid = std::make_unique<Trapezoid>();
+    p_trapezoid = std::make_unique<Trapezoid>(3, 0.5f, 1, glm::vec3{1, 0.6, 1}, glm::vec3{1, 0, 1});
     p_cone = std::make_unique<Cone>(1.f, 0.5f, -0.5f, -0.5f, 0, 10, glm::vec3{ 0.1, 0.5, 0.7 });
+    p_torus = std::make_unique<Torus>(1.5f, 100, 0.5f, 100, glm::vec3{ 0.2f, 1, 0.5f }, glm::vec3{ 1,0.5f, 0.2f });
     // OpenGL end
 
     return 0;
@@ -297,9 +299,11 @@ void Window::on_update()
     p_cylinder->rotate_render(glm::vec3{ 1,0,0 }, 0.01f);
     
     p_camera->matrix(45.0f, 0.1f, 100.0f, p_trapezoid->getShaderProgram(), "camMatrix");
-    p_trapezoid->rotate(glm::vec3{ 1,0,0 }, 0.01f);
+    p_trapezoid->rotate(glm::vec3{ 0,0,1 }, 0.01f);
 
-
+    p_camera->matrix(45.0f, 0.1f, 100.0f, p_torus->getShaderProgram(), "camMatrix");
+    p_torus->rotate(glm::vec3{ 0,0,1 }, 0.01f);
+    
     ImGui::End();
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

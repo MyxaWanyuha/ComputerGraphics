@@ -44,7 +44,10 @@ void VertexArray::unbind()
 
 void VertexArray::enable_vertex_buffer()
 {
-    glEnableVertexAttribArray(m_elements_count);
+    for (int i = 0; i < m_elements_count; ++i)
+    {
+        glEnableVertexAttribArray(i);
+    }
 }
 
 void VertexArray::add_vertex_buffer(const VertexBuffer& vertex_buffer)
