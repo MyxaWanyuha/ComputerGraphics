@@ -9,6 +9,7 @@
 #include "SimpleEngineCore/Rendering/OpenGL/Camera.hpp"
 #include "SimpleEngineCore/Rendering/OpenGL/Cone.hpp"
 #include "SimpleEngineCore/Rendering/OpenGL/Cylinder.hpp"
+#include "SimpleEngineCore/Rendering/OpenGL/Trapezoid.hpp"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -65,7 +66,7 @@ GLfloat cube_positions_colors[] = {
    0.5f,  0.5f, -0.5f,    ColorYellow
   -0.5f,  0.5f, -0.5f,    ColorBlue5
 };
-// трапеция, тор, спираль
+// тор, спираль
 GLfloat cube_positions_colors2[] = {
   -1.0f, -1.0f,  1.0f,    ColorRed   //front
    1.0f, -1.0f,  1.0f,    ColorBlue
@@ -253,6 +254,7 @@ i32 Window::init()
     p_vao2->set_index_buffer(*p_index_buffer);
 
     p_cylinder = std::make_unique<Cylinder>(1.f, 0.5f, 0.5f, 0.5f, 0, 10, glm::vec3{ 1, 1, 1 });
+    p_trapezoid = std::make_unique<Trapezoid>();
     p_cone = std::make_unique<Cone>(1.f, 0.5f, -0.5f, -0.5f, 0, 10, glm::vec3{ 0.1, 0.5, 0.7 });
     // OpenGL end
 
@@ -287,17 +289,16 @@ void Window::on_update()
     p_vao2->bind();
     glDrawElements(DrawType, static_cast<GLsizei>(p_vao2->get_indices_count()), GL_UNSIGNED_INT, nullptr);
 
-    if (p_cone)
-    {
-        p_camera->matrix(45.0f, 0.1f, 100.0f, p_cone->getShaderProgram(), "camMatrix");
-        p_cone->rotate(glm::vec3{ 1,1,0 }, 0.01f);
-    }
 
-    if (p_cylinder)
-    {
-        p_camera->matrix(45.0f, 0.1f, 100.0f, p_cylinder->getShaderProgram(), "camMatrix");
-        p_cylinder->rotate_render(glm::vec3{ 1,0,0 }, 0.01f);
-    }
+    p_camera->matrix(45.0f, 0.1f, 100.0f, p_cone->getShaderProgram(), "camMatrix");
+    p_cone->rotate(glm::vec3{ 1,1,0 }, 0.01f);
+
+    p_camera->matrix(45.0f, 0.1f, 100.0f, p_cylinder->getShaderProgram(), "camMatrix");
+    p_cylinder->rotate_render(glm::vec3{ 1,0,0 }, 0.01f);
+    
+    p_camera->matrix(45.0f, 0.1f, 100.0f, p_trapezoid->getShaderProgram(), "camMatrix");
+    p_trapezoid->rotate(glm::vec3{ 1,0,0 }, 0.01f);
+
 
     ImGui::End();
     ImGui::Render();

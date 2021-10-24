@@ -29,10 +29,9 @@ void main() {
 })";
 
 
-Trapezoid::Trapezoid(const GLfloat height, const float up_length, const float down_length, const glm::vec3& color)
+Trapezoid::Trapezoid(const GLfloat height, const float up_length, const float down_length, const glm::vec3& color, const glm::vec3& center)
 {
-    m_color = color;
-    generate(height, up_length, down_length, cx, cy, cz);
+    generate(height, up_length, down_length, color, center);
     m_p_shader_program = std::make_unique<ShaderProgram>(trapezoid_vertex_shader, trapezoid_fragment_shader);
     rotationUniformLoc = m_p_shader_program->get_uniform_location("rotationMatrix");
 
@@ -75,16 +74,98 @@ void Trapezoid::render()
         nullptr);
 }
 
-void Trapezoid::generate(const GLfloat height, const float up_length, const float down_length)
+void Trapezoid::generate(const GLfloat height, const float up_length, const float down_length, const glm::vec3& color, const glm::vec3& center)
 {
-    positionsColors.resize(24);
-    indices.resize(24);
+    int i = -1;
+    // dots
+    {
+    positionsColors[++i] = down_length * 0.5f + center.x;
+    positionsColors[++i] = down_length * 0.5f + center.y;
+    positionsColors[++i] = down_length * 0.5f + center.z;
+    positionsColors[++i] = color.x;
+    positionsColors[++i] = color.y;
+    positionsColors[++i] = color.z;
 
-    //positionsColors[0]
-    //positionsColors[0]
-    //positionsColors[0]
+    positionsColors[++i] = down_length * 0.5f + center.x;
+    positionsColors[++i] = -1 * down_length * 0.5f + center.y;
+    positionsColors[++i] = down_length * 0.5f + center.z;
+    positionsColors[++i] = color.x;
+    positionsColors[++i] = color.y;
+    positionsColors[++i] = color.z;
 
+    positionsColors[++i] = -1 * down_length * 0.5f + center.x;
+    positionsColors[++i] = -1 * down_length * 0.5f + center.y;
+    positionsColors[++i] = down_length * 0.5f + center.z;
+    positionsColors[++i] = color.x;
+    positionsColors[++i] = color.y;
+    positionsColors[++i] = color.z;
 
+    positionsColors[++i] = -1 * down_length * 0.5f + center.x;
+    positionsColors[++i] = down_length * 0.5f + center.y;
+    positionsColors[++i] = down_length * 0.5f + center.z;
+    positionsColors[++i] = color.x;
+    positionsColors[++i] = color.y;
+    positionsColors[++i] = color.z;
+
+    positionsColors[++i] = up_length * 0.5f + center.x;
+    positionsColors[++i] = up_length * 0.5f + center.y;
+    positionsColors[++i] = up_length * 0.5f + center.z;
+    positionsColors[++i] = color.x;
+    positionsColors[++i] = color.y;
+    positionsColors[++i] = color.z;
+
+    positionsColors[++i] = up_length * 0.5f + center.x;
+    positionsColors[++i] = -1 * up_length * 0.5f + center.y;
+    positionsColors[++i] = up_length * 0.5f + center.z;
+    positionsColors[++i] = color.x;
+    positionsColors[++i] = color.y;
+    positionsColors[++i] = color.z;
+
+    positionsColors[++i] = -1 * up_length * 0.5f + center.x;
+    positionsColors[++i] = -1 * up_length * 0.5f + center.y;
+    positionsColors[++i] = up_length * 0.5f + center.z;
+    positionsColors[++i] = color.x;
+    positionsColors[++i] = color.y;
+    positionsColors[++i] = color.z;
+
+    positionsColors[++i] = -1 * up_length * 0.5f + center.x;
+    positionsColors[++i] = up_length * 0.5f + center.y;
+    positionsColors[++i] = up_length * 0.5f + center.z;
+    positionsColors[++i] = color.x;
+    positionsColors[++i] = color.y;
+    positionsColors[++i] = color.z;
+    }
+    
+    // indices
+    {
+    i = -1;
+    indices[++i] = 0;
+    indices[++i] = 1;
+    indices[++i] = 1;
+    indices[++i] = 2;
+    indices[++i] = 2;
+    indices[++i] = 3;
+    indices[++i] = 3;
+    indices[++i] = 0;
+
+    indices[++i] = 4;
+    indices[++i] = 5;
+    indices[++i] = 5;
+    indices[++i] = 6;
+    indices[++i] = 6;
+    indices[++i] = 7;
+    indices[++i] = 7;
+    indices[++i] = 4;
+
+    indices[++i] = 0;
+    indices[++i] = 4;
+    indices[++i] = 1;
+    indices[++i] = 5;
+    indices[++i] = 2;
+    indices[++i] = 6;
+    indices[++i] = 3;
+    indices[++i] = 7;
+    }
 }
 
 }
