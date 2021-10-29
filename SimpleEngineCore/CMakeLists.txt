@@ -20,6 +20,7 @@ set(ENGINE_PRIVATE_INCLUDES
     src/SimpleEngineCore/Rendering/OpenGL/Cylinder.hpp
     src/SimpleEngineCore/Rendering/OpenGL/Trapezoid.hpp
     src/SimpleEngineCore/Rendering/OpenGL/Torus.hpp
+    src/SimpleEngineCore/Rendering/OpenGL/Spiral.hpp
 )
 
 set(ENGINE_PRIVATE_SOURCE
@@ -35,6 +36,7 @@ set(ENGINE_PRIVATE_SOURCE
     src/SimpleEngineCore/Rendering/OpenGL/Cylinder.cpp
     src/SimpleEngineCore/Rendering/OpenGL/Trapezoid.cpp
     src/SimpleEngineCore/Rendering/OpenGL/Torus.cpp
+    src/SimpleEngineCore/Rendering/OpenGL/Spiral.cpp
 )
 
 set(ENGINE_ALL_SOURCES

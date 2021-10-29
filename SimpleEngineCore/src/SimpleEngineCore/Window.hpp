@@ -58,6 +58,7 @@ private:
     std::unique_ptr<class Cylinder> p_cylinder;
     std::unique_ptr<class Trapezoid> p_trapezoid;
     std::unique_ptr<class Torus> p_torus;
+    std::unique_ptr<class Spiral> p_spiral;
 
 };
 
