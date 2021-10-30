@@ -1,5 +1,5 @@
 # ComputerGraphics
-Windows/linux cmake:
+Windows/Linux cmake:
 ```
 mkdir build
 cd build
