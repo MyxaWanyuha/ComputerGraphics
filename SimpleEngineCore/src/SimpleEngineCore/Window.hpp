@@ -60,6 +60,8 @@ private:
     std::unique_ptr<class Torus> p_torus;
     std::unique_ptr<class Spiral> p_spiral;
 
+    std::unique_ptr<class Cube> p_shape_cube;
+
 };
 
 }

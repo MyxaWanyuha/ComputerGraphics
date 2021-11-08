@@ -21,6 +21,8 @@ set(ENGINE_PRIVATE_INCLUDES
     src/SimpleEngineCore/Rendering/OpenGL/Trapezoid.hpp
     src/SimpleEngineCore/Rendering/OpenGL/Torus.hpp
     src/SimpleEngineCore/Rendering/OpenGL/Spiral.hpp
+    src/SimpleEngineCore/Rendering/OpenGL/Shape.hpp
+    src/SimpleEngineCore/Rendering/OpenGL/Cube.hpp
 )
 
 set(ENGINE_PRIVATE_SOURCE
@@ -37,6 +39,8 @@ set(ENGINE_PRIVATE_SOURCE
     src/SimpleEngineCore/Rendering/OpenGL/Trapezoid.cpp
     src/SimpleEngineCore/Rendering/OpenGL/Torus.cpp
     src/SimpleEngineCore/Rendering/OpenGL/Spiral.cpp
+    src/SimpleEngineCore/Rendering/OpenGL/Shape.cpp
+    src/SimpleEngineCore/Rendering/OpenGL/Cube.cpp
 )
 
 set(ENGINE_ALL_SOURCES

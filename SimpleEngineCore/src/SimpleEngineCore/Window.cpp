@@ -13,6 +13,8 @@
 #include "SimpleEngineCore/Rendering/OpenGL/Torus.hpp"
 #include "SimpleEngineCore/Rendering/OpenGL/Spiral.hpp"
 
+#include "SimpleEngineCore/Rendering/OpenGL/Cube.hpp"
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -260,6 +262,8 @@ i32 Window::init()
     p_cone = std::make_unique<Cone>(1.f, 0.5f, -0.5f, -0.5f, 0, 10, glm::vec3{ 0.1, 0.5, 0.7 });
     p_torus = std::make_unique<Torus>(1.0f, 20, 0.5f, 20, glm::vec3{ 0.2f, 1, 0.5f }, glm::vec3{ 3,2.0f, 1.2f });
     p_spiral = std::make_unique<Spiral>(glm::vec3{ 1,1,1 }, glm::vec3{ 1,2,3 });
+
+    p_shape_cube = std::make_unique<Cube>();
     // OpenGL end
 
     return 0;
@@ -278,36 +282,49 @@ void Window::on_update()
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
-    ImGui::Begin("Background Color Window");
+    ImGui::Begin("Editor");
     ImGui::ColorEdit4("Background Color", m_background_color);
 
     p_camera->inputs();
 
-    angle += 0.01f;
+    //angle += 0.01f;
+    //p_camera->matrix(45.0f, 0.1f, 100.0f, *p_shader_program2, "camMatrix");
+    //p_shader_program2->bind();
+    //glUniformMatrix4fv(p_shader_program2->get_uniform_location("transform"), 1, GL_FALSE, glm::value_ptr(glm::rotate(angle, glm::vec3{ 0,1,0 })));
+    //p_vao2->enable_vertex_buffer();
+    //p_vao2->set_index_buffer(*p_index_buffer);
+    //p_vao2->bind();
+    //glDrawElements(DrawType, static_cast<GLsizei>(p_vao2->get_indices_count()), GL_UNSIGNED_INT, nullptr);
 
-    p_camera->matrix(45.0f, 0.1f, 100.0f, *p_shader_program2, "camMatrix");
-    p_shader_program2->bind();
-    glUniformMatrix4fv(p_shader_program2->get_uniform_location("transform"), 1, GL_FALSE, glm::value_ptr(glm::rotate(angle, glm::vec3{ 0,1,0 })));
-    p_vao2->enable_vertex_buffer();
-    p_vao2->set_index_buffer(*p_index_buffer);
-    p_vao2->bind();
-    glDrawElements(DrawType, static_cast<GLsizei>(p_vao2->get_indices_count()), GL_UNSIGNED_INT, nullptr);
+    //p_camera->matrix(45.0f, 0.1f, 100.0f, p_cone->getShaderProgram(), "camMatrix");
+    //p_cone->rotate(glm::vec3{ 1,1,0 }, 0.01f);
 
+    //p_camera->matrix(45.0f, 0.1f, 100.0f, p_cylinder->getShaderProgram(), "camMatrix");
+    //p_cylinder->rotate_render(glm::vec3{ 1,0,0 }, 0.01f);
+    //
+    //p_camera->matrix(45.0f, 0.1f, 100.0f, p_trapezoid->getShaderProgram(), "camMatrix");
+    //p_trapezoid->rotate(glm::vec3{ 0,0,1 }, 0.01f);
 
-    p_camera->matrix(45.0f, 0.1f, 100.0f, p_cone->getShaderProgram(), "camMatrix");
-    p_cone->rotate(glm::vec3{ 1,1,0 }, 0.01f);
+    //p_camera->matrix(45.0f, 0.1f, 100.0f, p_torus->getShaderProgram(), "camMatrix");
+    //p_torus->rotate(glm::vec3{ 0,0,1 }, 0.01f);
+    //
+    //p_camera->matrix(45.0f, 0.1f, 100.0f, p_spiral->getShaderProgram(), "camMatrix");
+    //p_spiral->rotate(glm::vec3{ 0,0,1 }, 0.0f);
 
-    p_camera->matrix(45.0f, 0.1f, 100.0f, p_cylinder->getShaderProgram(), "camMatrix");
-    p_cylinder->rotate_render(glm::vec3{ 1,0,0 }, 0.01f);
-    
-    p_camera->matrix(45.0f, 0.1f, 100.0f, p_trapezoid->getShaderProgram(), "camMatrix");
-    p_trapezoid->rotate(glm::vec3{ 0,0,1 }, 0.01f);
+    //
+    static glm::vec3 scale = { 1,1,1 };
+    static glm::vec3 rotation;
+    static glm::vec3 location;
 
-    p_camera->matrix(45.0f, 0.1f, 100.0f, p_torus->getShaderProgram(), "camMatrix");
-    p_torus->rotate(glm::vec3{ 0,0,1 }, 0.01f);
-    
-    p_camera->matrix(45.0f, 0.1f, 100.0f, p_spiral->getShaderProgram(), "camMatrix");
-    p_spiral->rotate(glm::vec3{ 0,0,1 }, 0.0f);
+    ImGui::InputFloat3("Scale", glm::value_ptr(scale));
+    ImGui::InputFloat3("Rotation", glm::value_ptr(rotation));
+    ImGui::InputFloat3("Location", glm::value_ptr(location));
+    p_shape_cube->set_scale(scale);
+    p_shape_cube->set_location(location);
+    p_shape_cube->set_rotation(rotation);
+    p_camera->matrix(45.0f, 0.1f, 100.0f, p_shape_cube->get_shader_program(), "view_matrix");
+    p_shape_cube->render();
+    //
 
     ImGui::End();
     ImGui::Render();
