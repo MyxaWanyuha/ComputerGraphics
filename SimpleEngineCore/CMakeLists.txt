@@ -11,6 +11,7 @@ set(ENGINE_PUBLIC_INCLUDES
 
 set(ENGINE_PRIVATE_INCLUDES
     src/SimpleEngineCore/Window.hpp
+    src/SimpleEngineCore/stl_reader.hpp
     src/SimpleEngineCore/Rendering/OpenGL/ShaderProgram.hpp
     src/SimpleEngineCore/Rendering/OpenGL/VertexBuffer.hpp
     src/SimpleEngineCore/Rendering/OpenGL/VertexArray.hpp
@@ -23,6 +24,8 @@ set(ENGINE_PRIVATE_INCLUDES
     src/SimpleEngineCore/Rendering/OpenGL/Spiral.hpp
     src/SimpleEngineCore/Rendering/OpenGL/Shape.hpp
     src/SimpleEngineCore/Rendering/OpenGL/Cube.hpp
+    src/SimpleEngineCore/Rendering/OpenGL/ModelLoader.hpp
+    src/SimpleEngineCore/Rendering/OpenGL/Model.hpp
 )
 
 set(ENGINE_PRIVATE_SOURCE
@@ -41,6 +44,8 @@ set(ENGINE_PRIVATE_SOURCE
     src/SimpleEngineCore/Rendering/OpenGL/Spiral.cpp
     src/SimpleEngineCore/Rendering/OpenGL/Shape.cpp
     src/SimpleEngineCore/Rendering/OpenGL/Cube.cpp
+    src/SimpleEngineCore/Rendering/OpenGL/ModelLoader.cpp
+    src/SimpleEngineCore/Rendering/OpenGL/Model.cpp
 )
 
 set(ENGINE_ALL_SOURCES

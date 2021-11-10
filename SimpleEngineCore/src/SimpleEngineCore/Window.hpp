@@ -44,16 +44,10 @@ private:
 
     GLFWwindow* m_pWindow = nullptr;
     WindowData m_data;
-    float m_background_color[4] = {0.f, 0.f, 0.f, 1.f};
+    float m_background_color[4] = {0.271f, 0.232f, 0.451f, 1.f};
 
-    std::unique_ptr<class ShaderProgram> p_shader_program;
-    std::unique_ptr<class VertexBuffer> p_positions_colors_vbo;
-    std::unique_ptr<class IndexBuffer> p_index_buffer;
-    std::unique_ptr<class VertexArray> p_vao;
+    std::unique_ptr<class Camera> p_camera;
 
-    std::unique_ptr<class ShaderProgram> p_shader_program2;
-    std::unique_ptr<class VertexBuffer> p_positions_colors_vbo2;
-    std::unique_ptr<class VertexArray> p_vao2;
     std::unique_ptr<class Cone> p_cone;
     std::unique_ptr<class Cylinder> p_cylinder;
     std::unique_ptr<class Trapezoid> p_trapezoid;
@@ -61,7 +55,9 @@ private:
     std::unique_ptr<class Spiral> p_spiral;
 
     std::unique_ptr<class Cube> p_shape_cube;
+    std::unique_ptr<class TriangleCube> p_shape_triangle_cube;
 
+    std::unique_ptr<class Model> p_shape_model;
 };
 
 }

@@ -14,6 +14,7 @@
 #include "SimpleEngineCore/Rendering/OpenGL/Spiral.hpp"
 
 #include "SimpleEngineCore/Rendering/OpenGL/Cube.hpp"
+#include "SimpleEngineCore/Rendering/OpenGL/Model.hpp"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -30,88 +31,10 @@
 #include <math.h>
 #include <glm/gtc/type_ptr.hpp>
 
+
 namespace SimpleEngine {
 
 static bool s_GLFW_initialized = false;
-
-/*GLfloat positions_colors_triangle[] = {
-     0.0f,  0.5f, 0.0f,  1.0f, 1.0f, 0.0f,
-     0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 1.0f,
-    -0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 1.0f
-};
-
-GLfloat positions_colors_square[] = {
-    -0.5f, -0.5f, 0.0f,  1.0f, 1.0f, 0.0f,
-     0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 1.0f,
-    -0.5f,  0.5f, 0.0f,  1.0f, 0.0f, 1.0f,
-     0.5f,  0.5f, 0.0f,  0.4f, 1.0f, 0.3f
-};
-
-GLuint indices_square[] = {
-    0, 1, 2, 3, 2, 1
-};*/
-#define ColorRed     1.0f, 0.0f, 0.0f,
-#define ColorGreen   0.0f, 1.0f, 0.0f,
-#define ColorBlue    0.0f, 0.0f, 1.0f,
-#define ColorCyan    0.0f, 1.0f, 1.0f,
-#define ColorOrange  1.0f, 0.0f, 1.0f,
-#define ColorYellow  1.0f, 1.0f, 0.0f,
-#define ColorBlue5   0.5f, 0.7f, 0.9f,
-#define ColorWhite   1.0f, 1.0f, 1.0f,
-#define ColorBlack   0.0f, 0.0f, 0.0f,
-
-GLfloat cube_positions_colors[] = {
-  -0.5f, -0.5f,  0.5f,    ColorRed   //front
-   0.5f, -0.5f,  0.5f,    ColorGreen
-   0.5f,  0.5f,  0.5f,    ColorBlue
-  -0.5f,  0.5f,  0.5f,    ColorWhite
-  -0.5f, -0.5f, -0.5f,    ColorCyan  //back
-   0.5f, -0.5f, -0.5f,    ColorOrange
-   0.5f,  0.5f, -0.5f,    ColorYellow
-  -0.5f,  0.5f, -0.5f,    ColorBlue5
-};
-// тор, спираль
-GLfloat cube_positions_colors2[] = {
-  -1.0f, -1.0f,  1.0f,    ColorRed   //front
-   1.0f, -1.0f,  1.0f,    ColorBlue
-   1.0f,  1.0f,  1.0f,    ColorOrange
-  -1.0f,  1.0f,  1.0f,    ColorYellow
-  -1.0f, -1.0f, -1.0f,    ColorRed  //back
-   1.0f, -1.0f, -1.0f,    ColorGreen
-   1.0f,  1.0f, -1.0f,    ColorBlue5
-  -1.0f,  1.0f, -1.0f,    ColorWhite
-};
-
-GLuint indices_cube[] = {
-    0,1,1,2,2,3,3,0,//front
-    4,5,5,6,6,7,7,4,//back
-    0,4,1,5,2,6,3,7,
-};
-
-i32 DrawType = GL_LINES;
-
-std::unique_ptr<Camera> p_camera;
-
-const char* vertex_shader = R"(
-#version 460
-layout(location = 0) in vec3 vertex_position;
-layout(location = 1) in vec3 vertex_color;
-out vec3 color;
-uniform mat4 camMatrix;
-uniform mat4 transform;
-void main() {
-    color = vertex_color;
-    gl_Position = camMatrix * transform * vec4(vertex_position, 1.0);
-})";
-
-const char* fragment_shader = R"(
-#version 460
-in vec3 color;
-out vec4 frag_color;
-void main() {
-   frag_color = vec4(color, 1.0);
-})";
-glm::mat4 unitary(1);
 
 Window::Window(string title, const u32 width, const u32 height)
     : m_data({std::move(title), width, height})
@@ -150,7 +73,7 @@ i32 Window::init()
         glfwTerminate();
         return -2;
     }
-    
+
     glfwMakeContextCurrent(m_pWindow);
 
     if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -158,6 +81,11 @@ i32 Window::init()
         LOG_CRITICAL("Failed to initialize GLAD");
         return -3;
     }
+    
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);
+    glDepthFunc(GL_LEQUAL);
+    glDepthRange(0.0f, 1.0f);
 
     glfwSetWindowUserPointer(m_pWindow, &m_data);
     glfwSetWindowSizeCallback(m_pWindow,
@@ -223,39 +151,7 @@ i32 Window::init()
             }
         });
 
-    // OpenGL
-
-    p_shader_program = std::make_unique<ShaderProgram>(vertex_shader, fragment_shader);
-    if(!p_shader_program->isCompiled())
-    {
-        return false;
-    }
-    p_shader_program2 = std::make_unique<ShaderProgram>(vertex_shader, fragment_shader);
-    if (!p_shader_program2->isCompiled())
-    {
-        return false;
-    }
-    
-    const BufferLayout buffer_layout_2_vec3
-    {
-        ShaderDataType::Float3,
-        ShaderDataType::Float3
-    };
-
     p_camera = std::make_unique<Camera>(*this, glm::vec3(0.0f, 0.0f, 2.0f));
-    {
-        p_vao = std::make_unique<VertexArray>();
-        p_positions_colors_vbo = std::make_unique<VertexBuffer>(cube_positions_colors, sizeof(cube_positions_colors), buffer_layout_2_vec3);
-        p_index_buffer = std::make_unique<IndexBuffer>(indices_cube, sizeof(indices_cube) / sizeof(indices_cube[0]));
-        p_vao->add_vertex_buffer(*p_positions_colors_vbo);
-        p_vao->set_index_buffer(*p_index_buffer);
-    }
-
-
-    p_positions_colors_vbo2 = std::make_unique<VertexBuffer>(cube_positions_colors2, sizeof(cube_positions_colors2), buffer_layout_2_vec3);
-    p_vao2 = std::make_unique<VertexArray>();
-    p_vao2->add_vertex_buffer(*p_positions_colors_vbo2);
-    p_vao2->set_index_buffer(*p_index_buffer);
 
     p_cylinder = std::make_unique<Cylinder>(1.f, 0.5f, 0.5f, 0.5f, 0, 10, glm::vec3{ 1, 1, 1 });
     p_trapezoid = std::make_unique<Trapezoid>(3, 0.5f, 1, glm::vec3{1, 0.6, 1}, glm::vec3{1, 0, 1});
@@ -264,16 +160,22 @@ i32 Window::init()
     p_spiral = std::make_unique<Spiral>(glm::vec3{ 1,1,1 }, glm::vec3{ 1,2,3 });
 
     p_shape_cube = std::make_unique<Cube>();
-    // OpenGL end
+    p_shape_cube->set_location({ 0, 0, 2.1f });
+    p_shape_triangle_cube = std::make_unique<TriangleCube>();
+    p_shape_model = std::make_unique<Model>("C:\\Users\\User\\source\\repos\\ComputerGraphics\\rei-full-character-and-base.stl");////rei-full-character-and-base.stl
+    p_shape_model->set_rotation({0, -45, 0});
+    p_shape_model->set_location({ 0, 1.1f, -1.0f });
+    const float model_scale = 0.01f;
+    p_shape_model->set_scale({ model_scale, model_scale, model_scale });
+    //p_shape_model->set_rotation({ 90, 0, 0 });
 
     return 0;
 }
 
-float angle = 0.0f;
 void Window::on_update()
 {
     glClearColor(m_background_color[0], m_background_color[1], m_background_color[2], m_background_color[3]);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     ImGuiIO& io = ImGui::GetIO();
     io.DisplaySize.x = static_cast<float>(get_width());
@@ -286,45 +188,47 @@ void Window::on_update()
     ImGui::ColorEdit4("Background Color", m_background_color);
 
     p_camera->inputs();
-
+    p_camera->update_matrix(45.0f, 0.1f, 100.0f);
+    //static float angle = 0.0f;
     //angle += 0.01f;
-    //p_camera->matrix(45.0f, 0.1f, 100.0f, *p_shader_program2, "camMatrix");
-    //p_shader_program2->bind();
-    //glUniformMatrix4fv(p_shader_program2->get_uniform_location("transform"), 1, GL_FALSE, glm::value_ptr(glm::rotate(angle, glm::vec3{ 0,1,0 })));
-    //p_vao2->enable_vertex_buffer();
-    //p_vao2->set_index_buffer(*p_index_buffer);
-    //p_vao2->bind();
-    //glDrawElements(DrawType, static_cast<GLsizei>(p_vao2->get_indices_count()), GL_UNSIGNED_INT, nullptr);
-
+    
     //p_camera->matrix(45.0f, 0.1f, 100.0f, p_cone->getShaderProgram(), "camMatrix");
     //p_cone->rotate(glm::vec3{ 1,1,0 }, 0.01f);
 
     //p_camera->matrix(45.0f, 0.1f, 100.0f, p_cylinder->getShaderProgram(), "camMatrix");
     //p_cylinder->rotate_render(glm::vec3{ 1,0,0 }, 0.01f);
-    //
+
     //p_camera->matrix(45.0f, 0.1f, 100.0f, p_trapezoid->getShaderProgram(), "camMatrix");
     //p_trapezoid->rotate(glm::vec3{ 0,0,1 }, 0.01f);
 
     //p_camera->matrix(45.0f, 0.1f, 100.0f, p_torus->getShaderProgram(), "camMatrix");
     //p_torus->rotate(glm::vec3{ 0,0,1 }, 0.01f);
-    //
+    
     //p_camera->matrix(45.0f, 0.1f, 100.0f, p_spiral->getShaderProgram(), "camMatrix");
     //p_spiral->rotate(glm::vec3{ 0,0,1 }, 0.0f);
 
-    //
-    static glm::vec3 scale = { 1,1,1 };
-    static glm::vec3 rotation;
-    static glm::vec3 location;
 
+    static glm::vec3 scale = p_shape_model->get_scale();
+    static glm::vec3 rotation = p_shape_model->get_rotation();
+    static glm::vec3 location = p_shape_model->get_location();
     ImGui::InputFloat3("Scale", glm::value_ptr(scale));
     ImGui::InputFloat3("Rotation", glm::value_ptr(rotation));
     ImGui::InputFloat3("Location", glm::value_ptr(location));
-    p_shape_cube->set_scale(scale);
-    p_shape_cube->set_location(location);
-    p_shape_cube->set_rotation(rotation);
-    p_camera->matrix(45.0f, 0.1f, 100.0f, p_shape_cube->get_shader_program(), "view_matrix");
+
+    //p_shape_cube->set_scale(scale);
+    //p_shape_cube->set_location(location);
+    //p_shape_cube->set_rotation(rotation);
+    p_camera->set_matrix(p_shape_cube->get_shader_program(), "view_matrix");
     p_shape_cube->render();
-    //
+
+    p_camera->set_matrix(p_shape_triangle_cube->get_shader_program(), "view_matrix");
+    p_shape_triangle_cube->render();
+
+    p_shape_model->set_scale(scale);
+    p_shape_model->set_location(location);
+    p_shape_model->set_rotation(rotation);
+    p_camera->set_matrix(p_shape_model->get_shader_program(), "view_matrix");
+    p_shape_model->render();
 
     ImGui::End();
     ImGui::Render();

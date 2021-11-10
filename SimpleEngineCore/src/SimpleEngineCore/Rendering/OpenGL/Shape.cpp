@@ -55,7 +55,7 @@ glm::mat4 Shape::make_location_matrix() const
     return glm::mat4(1,            0,            0,            0,
                      0,            1,            0,            0,
                      0,            0,            1,            0,
-           location.x,  location.y,  location.z,            1);
+            location.x,   location.y,   location.z,            1);
 }
 
 glm::mat4 Shape::make_rotation_matrix() const
