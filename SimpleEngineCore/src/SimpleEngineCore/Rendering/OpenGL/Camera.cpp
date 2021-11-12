@@ -32,6 +32,7 @@ void Camera::update_matrix(float FOVdeg, float nearPlane, float farPlane)
 
 void Camera::set_matrix(const ShaderProgram& shaderProgram, const char* uniform) const
 {
+    shaderProgram.bind();
     glUniformMatrix4fv(shaderProgram.get_uniform_location(uniform), 1, GL_FALSE,
         glm::value_ptr(camera_matrix));
 }

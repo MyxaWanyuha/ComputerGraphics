@@ -57,7 +57,8 @@ private:
     std::unique_ptr<class Cube> p_shape_cube;
     std::unique_ptr<class TriangleCube> p_shape_triangle_cube;
 
-    std::unique_ptr<class Model> p_shape_model;
+    std::unique_ptr<class Model> p_model_rei_obj;
+    std::unique_ptr<class Model> p_shape_model_rei_stl;
 };
 
 }

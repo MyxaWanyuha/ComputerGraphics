@@ -29,14 +29,14 @@ Cube::Cube()
 
 void Cube::render()
 {
+    m_p_shader_program->bind();
+    m_p_vao->bind();
     m_p_vao->enable_vertex_buffer();
     m_p_vao->set_index_buffer(*m_p_index_buffer);
-    m_p_shader_program->bind();
 
     glUniformMatrix4fv(model_matrix_uniform_loc, 1, GL_FALSE,
         glm::value_ptr(model_matrix));
 
-    m_p_vao->bind();
 
     glDrawElements(GL_LINES,
         static_cast<GLsizei>(m_p_vao->get_indices_count()),
@@ -69,14 +69,16 @@ TriangleCube::TriangleCube()
 
 void TriangleCube::render()
 {
+    m_p_vao->bind();
+    m_p_shader_program->bind();
+    m_p_positions_colors_vbo->bind();
+    m_p_index_buffer->bind();
+
     m_p_vao->enable_vertex_buffer();
     m_p_vao->set_index_buffer(*m_p_index_buffer);
-    m_p_shader_program->bind();
 
     glUniformMatrix4fv(model_matrix_uniform_loc, 1, GL_FALSE,
         glm::value_ptr(model_matrix));
-
-    m_p_vao->bind();
 
     glDrawElements(GL_TRIANGLES,
         static_cast<GLsizei>(m_p_vao->get_indices_count()),

@@ -12,6 +12,7 @@ set(ENGINE_PUBLIC_INCLUDES
 set(ENGINE_PRIVATE_INCLUDES
     src/SimpleEngineCore/Window.hpp
     src/SimpleEngineCore/stl_reader.hpp
+    src/SimpleEngineCore/stb_image.h
     src/SimpleEngineCore/Rendering/OpenGL/ShaderProgram.hpp
     src/SimpleEngineCore/Rendering/OpenGL/VertexBuffer.hpp
     src/SimpleEngineCore/Rendering/OpenGL/VertexArray.hpp
@@ -26,6 +27,7 @@ set(ENGINE_PRIVATE_INCLUDES
     src/SimpleEngineCore/Rendering/OpenGL/Cube.hpp
     src/SimpleEngineCore/Rendering/OpenGL/ModelLoader.hpp
     src/SimpleEngineCore/Rendering/OpenGL/Model.hpp
+    src/SimpleEngineCore/Rendering/OpenGL/Texture.hpp
 )
 
 set(ENGINE_PRIVATE_SOURCE
@@ -46,6 +48,7 @@ set(ENGINE_PRIVATE_SOURCE
     src/SimpleEngineCore/Rendering/OpenGL/Cube.cpp
     src/SimpleEngineCore/Rendering/OpenGL/ModelLoader.cpp
     src/SimpleEngineCore/Rendering/OpenGL/Model.cpp
+    src/SimpleEngineCore/Rendering/OpenGL/Texture.cpp
 )
 
 set(ENGINE_ALL_SOURCES
