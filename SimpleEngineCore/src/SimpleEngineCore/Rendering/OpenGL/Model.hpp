@@ -9,6 +9,7 @@
 #include "SimpleEngineCore/Rendering/OpenGL/IndexBuffer.hpp"
 #include "SimpleEngineCore/Rendering/OpenGL/VertexArray.hpp"
 #include "SimpleEngineCore/Rendering/OpenGL/Texture.hpp"
+#include "SimpleEngineCore/Rendering/OpenGL/Material.hpp"
 
 #include <memory>
 #include <glad/glad.h>
@@ -28,6 +29,7 @@ public:
     Model& operator=(const Model&) = delete;
     Model& operator=(Model&&) = delete;
 private:
+    Material material;
     i32 model_matrix_uniform_loc;
     std::unique_ptr<ShaderProgram> m_p_shader_program;
     std::unique_ptr<VertexArray>   m_p_vao;

@@ -137,6 +137,7 @@ namespace SimpleEngine
         vertex_count = obj.size();
         m_p_shader_program = std::make_unique<ShaderProgram>(default_vertex_shader2, default_fragment_shader2);
         model_matrix_uniform_loc = m_p_shader_program->get_uniform_location("model_matrix");
+        material.init_shader(*m_p_shader_program);
 
         m_p_vao = std::make_unique<VertexArray>();
         const BufferLayout buffer_pos_tex_normal
@@ -214,7 +215,8 @@ namespace SimpleEngine
         m_p_shader_program->bind();
         m_p_vao->bind();
         m_p_vao->enable_vertex_buffer();
-
+        material.update_shader(*m_p_shader_program);
+        
         glUniformMatrix4fv(model_matrix_uniform_loc, 1, GL_FALSE,
             glm::value_ptr(model_matrix));
 

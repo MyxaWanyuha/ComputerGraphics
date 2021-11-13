@@ -11,6 +11,7 @@ public:
     Camera(class Window& w, glm::vec3 position);
     void update_matrix(float FOVdeg, float nearPlane, float farPlane);
     void set_matrix(const ShaderProgram& shaderProgram, const char* uniform) const;
+    void set_position(const ShaderProgram& shaderProgram, const char* uniform) const;
     void inputs();
     void SetSpeed(float speed) { m_speed = speed; }
     void MoveForward();

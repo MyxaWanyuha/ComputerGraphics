@@ -15,6 +15,7 @@
 
 #include "SimpleEngineCore/Rendering/OpenGL/Cube.hpp"
 #include "SimpleEngineCore/Rendering/OpenGL/Model.hpp"
+#include "SimpleEngineCore/Rendering/OpenGL/Light.hpp"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -159,26 +160,31 @@ i32 Window::init()
     //p_trapezoid = std::make_unique<Trapezoid>(3, 0.5f, 1, glm::vec3{1, 0.6, 1}, glm::vec3{1, 0, 1});
     //p_cone = std::make_unique<Cone>(1.f, 0.5f, -0.5f, -0.5f, 0, 10, glm::vec3{ 0.1, 0.5, 0.7 });
     //p_torus = std::make_unique<Torus>(1.0f, 20, 0.5f, 20, glm::vec3{ 0.2f, 1, 0.5f }, glm::vec3{ 3,2.0f, 1.2f });
-    //p_spiral = std::make_unique<Spiral>(glm::vec3{ 1,1,1 }, glm::vec3{ 1,2,3 });
+    //p_spiral = std::make_unique<Spiral>(glm::veLight.cppc3{ 1,1,1 }, glm::vec3{ 1,2,3 });
 
     p_shape_cube = std::make_unique<Cube>();
     p_shape_cube->set_location({ 0, 0, 2.1f });
     p_shape_triangle_cube = std::make_unique<TriangleCube>();
 
-    //std::string parentDir = (fs::current_path().fs::path::parent_path()).string();
-    //LOG_INFO(parentDir);
+    std::string parentDir = (fs::current_path().fs::path::parent_path()).string();
+    LOG_INFO("parentDir: " + parentDir);
     p_model_rei_obj = std::make_unique<Model>(
-        "C:\\Users\\User\\source\\repos\\ComputerGraphics\\resources\\rei_textured\\rei_textured.obj",
-        "C:\\Users\\User\\source\\repos\\ComputerGraphics\\resources\\rei_textured\\rei_texture2.png");//
+        (parentDir + "\\resources\\rei_textured\\rei_textured.obj").c_str(),
+        (parentDir + "\\resources\\rei_textured\\rei_texture2.png").c_str());//
     p_model_rei_obj->set_rotation({ 90, -45, 0 });
     p_model_rei_obj->set_location({ 0, 1.1f, 1.0f });
     const float model_scale = 0.01f;
     p_model_rei_obj->set_scale({ model_scale, model_scale, model_scale });
 
-    p_shape_model_rei_stl = std::make_unique<Model>("C:\\Users\\User\\source\\repos\\ComputerGraphics\\resources\\rei-full-character-and-base.stl");
+    p_point_light = std::make_unique<PointLight>(glm::vec3(0, 1.2f, 1.1f));
+    p_point_light->init_shader(p_model_rei_obj->get_shader_program());
+    
+    p_shape_model_rei_stl = std::make_unique<Model>(
+        (parentDir + "\\resources\\rei-full-character-and-base.stl").c_str());
     p_shape_model_rei_stl->set_rotation({0, -45, 0});
     p_shape_model_rei_stl->set_location({ 0, 1.1f, -1.0f });
     p_shape_model_rei_stl->set_scale({ model_scale, model_scale, model_scale });
+
 
     return 0;
 }
@@ -222,30 +228,33 @@ void Window::on_update()
     static glm::vec3 scale = p_model_rei_obj->get_scale();
     static glm::vec3 rotation = p_model_rei_obj->get_rotation();
     static glm::vec3 location = p_model_rei_obj->get_location();
+    static glm::vec3 light_position = p_point_light->get_position();
     ImGui::InputFloat3("Scale", glm::value_ptr(scale));
     ImGui::InputFloat3("Rotation", glm::value_ptr(rotation));
     ImGui::InputFloat3("Location", glm::value_ptr(location));
-
-    //p_shape_cube->set_scale(scale);
-    //p_shape_cube->set_location(location);
-    //p_shape_cube->set_rotation(rotation);
+    ImGui::InputFloat3("Light Position", glm::value_ptr(light_position));
+    p_point_light->set_position(light_position);
 
     p_model_rei_obj->set_scale(scale);
     p_model_rei_obj->set_location(location);
     p_model_rei_obj->set_rotation(rotation);
     p_camera->set_matrix(p_model_rei_obj->get_shader_program(), "view_matrix");
+    p_camera->set_position(p_model_rei_obj->get_shader_program(), "cameraPos");
+    p_point_light->update_shader(p_model_rei_obj->get_shader_program());
     p_model_rei_obj->render();
-
+    
     p_camera->set_matrix(p_shape_model_rei_stl->get_shader_program(), "view_matrix");
+    p_point_light->update_shader(p_shape_model_rei_stl->get_shader_program());
     p_shape_model_rei_stl->render();
     
 
     p_camera->set_matrix(p_shape_triangle_cube->get_shader_program(), "view_matrix");
+    p_point_light->update_shader(p_shape_triangle_cube->get_shader_program());
     p_shape_triangle_cube->render();
 
     p_camera->set_matrix(p_shape_cube->get_shader_program(), "view_matrix");
+    p_point_light->update_shader(p_shape_cube->get_shader_program());
     p_shape_cube->render();
-
 
     ImGui::End();
     ImGui::Render();

@@ -59,6 +59,7 @@ private:
 
     std::unique_ptr<class Model> p_model_rei_obj;
     std::unique_ptr<class Model> p_shape_model_rei_stl;
+    std::unique_ptr<class PointLight> p_point_light;
 };
 
 }

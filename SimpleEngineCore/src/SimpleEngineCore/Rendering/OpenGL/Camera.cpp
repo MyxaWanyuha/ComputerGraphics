@@ -37,6 +37,13 @@ void Camera::set_matrix(const ShaderProgram& shaderProgram, const char* uniform)
         glm::value_ptr(camera_matrix));
 }
 
+void Camera::set_position(const ShaderProgram& shaderProgram, const char* uniform) const
+{
+    shaderProgram.bind();
+    glUniform3fv(shaderProgram.get_uniform_location(uniform), 1,
+        glm::value_ptr(m_position));
+}
+
 void Camera::inputs()
 {
     if(glfwGetKey(m_window.get_window_ptr(), GLFW_KEY_W) == GLFW_PRESS)
