@@ -176,7 +176,7 @@ i32 Window::init()
     const float model_scale = 0.01f;
     p_model_rei_obj->set_scale({ model_scale, model_scale, model_scale });
 
-    p_point_light = std::make_unique<PointLight>(glm::vec3(0, 1.2f, 1.1f));
+    p_point_light = std::make_unique<PointLight>(glm::vec3(-1, 4, 3));
     p_point_light->init_shader(p_model_rei_obj->get_shader_program());
     
     p_shape_model_rei_stl = std::make_unique<Model>(
