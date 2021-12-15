@@ -44,24 +44,8 @@ namespace SimpleEngine
             ss.str(line);
             std::string prefix;
             ss >> prefix;
-
-            if (prefix == "#")
-            {
-
-            }
-            else if (prefix == "o")
-            {
-
-            }
-            else if (prefix == "s")
-            {
-
-            }
-            else if (prefix == "use_mtl")
-            {
-
-            }
-            else if (prefix == "v") //Vertex position
+            
+            if (prefix == "v") //Vertex position
             {
                 glm::vec3 temp_vec3;
                 ss >> temp_vec3.x >> temp_vec3.y >> temp_vec3.z;
@@ -110,10 +94,6 @@ namespace SimpleEngine
                     if (counter > 2)
                         counter = 0;
                 }
-            }
-            else
-            {
-
             }
         }
 

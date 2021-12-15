@@ -20,7 +20,7 @@ namespace SimpleEngine
 	{
 	}
 
-	void PointLight::update_shader(const ShaderProgram& program)
+	void PointLight::update_shader(const ShaderProgram& program) const
 	{
 		program.bind();
 		glUniform3fv(uniform_loc_position, 1, glm::value_ptr(position));

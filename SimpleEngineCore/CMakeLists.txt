@@ -30,6 +30,7 @@ set(ENGINE_PRIVATE_INCLUDES
     src/SimpleEngineCore/Rendering/OpenGL/Texture.hpp
     src/SimpleEngineCore/Rendering/OpenGL/Light.hpp
     src/SimpleEngineCore/Rendering/OpenGL/Material.hpp
+	src/SimpleEngineCore/Rendering/OpenGL/ComplexModel.hpp
 )
 
 set(ENGINE_PRIVATE_SOURCE
@@ -52,6 +53,7 @@ set(ENGINE_PRIVATE_SOURCE
     src/SimpleEngineCore/Rendering/OpenGL/Model.cpp
     src/SimpleEngineCore/Rendering/OpenGL/Texture.cpp
     src/SimpleEngineCore/Rendering/OpenGL/Light.cpp
+	src/SimpleEngineCore/Rendering/OpenGL/ComplexModel.cpp
 )
 
 set(ENGINE_ALL_SOURCES

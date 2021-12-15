@@ -10,7 +10,7 @@ class Light
 {
 public:
 	Light(float intensity, glm::vec3 color);
-	virtual void update_shader(const ShaderProgram& program) = 0;
+	virtual void update_shader(const ShaderProgram& program) const = 0;
 	virtual ~Light() = default;
 
 protected:
@@ -25,7 +25,7 @@ public:
 		float constant = 1.f, float linear = 0.045f, float quadratic = 0.0075f);
 	virtual ~PointLight() override = default;
 
-	virtual void update_shader(const ShaderProgram& program) override;
+	virtual void update_shader(const ShaderProgram& program) const override;
 	void init_shader(const ShaderProgram& program);
 	void set_position(const glm::vec3& position);
 	glm::vec3 get_position() const { return position; }

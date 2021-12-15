@@ -33,6 +33,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include<filesystem>
+#include <SimpleEngineCore/Rendering/OpenGL/ComplexModel.hpp>
 namespace fs = std::filesystem;
 
 namespace SimpleEngine {
@@ -89,6 +90,8 @@ i32 Window::init()
     glDepthMask(GL_TRUE);
     glDepthFunc(GL_LEQUAL);
     glDepthRange(0.0f, 1.0f);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glfwSetWindowUserPointer(m_pWindow, &m_data);
     glfwSetWindowSizeCallback(m_pWindow,
@@ -156,36 +159,22 @@ i32 Window::init()
 
     p_camera = std::make_unique<Camera>(*this, glm::vec3(0.0f, 0.0f, 2.0f));
 
-    //p_cylinder = std::make_unique<Cylinder>(1.f, 0.5f, 0.5f, 0.5f, 0, 10, glm::vec3{ 1, 1, 1 });
-    //p_trapezoid = std::make_unique<Trapezoid>(3, 0.5f, 1, glm::vec3{1, 0.6, 1}, glm::vec3{1, 0, 1});
-    //p_cone = std::make_unique<Cone>(1.f, 0.5f, -0.5f, -0.5f, 0, 10, glm::vec3{ 0.1, 0.5, 0.7 });
-    //p_torus = std::make_unique<Torus>(1.0f, 20, 0.5f, 20, glm::vec3{ 0.2f, 1, 0.5f }, glm::vec3{ 3,2.0f, 1.2f });
-    //p_spiral = std::make_unique<Spiral>(glm::veLight.cppc3{ 1,1,1 }, glm::vec3{ 1,2,3 });
-
-    p_shape_cube = std::make_unique<Cube>();
-    p_shape_cube->set_location({ 0, 0, 2.1f });
-    p_shape_triangle_cube = std::make_unique<TriangleCube>();
-
     std::string parentDir = (fs::current_path().fs::path::parent_path()).string();
     LOG_INFO("parentDir: " + parentDir);
-    p_model_rei_obj = std::make_unique<Model>(
-        (parentDir + "\\resources\\rei_textured\\rei_textured.obj").c_str(),
-        (parentDir + "\\resources\\rei_textured\\rei_texture2.png").c_str());//
-    p_model_rei_obj->set_rotation({ 90, -45, 0 });
-    p_model_rei_obj->set_location({ 0, 1.1f, 1.0f });
-    const float model_scale = 0.01f;
-    p_model_rei_obj->set_scale({ model_scale, model_scale, model_scale });
+
+    zelda = std::make_unique<ComplexModel>(
+        ComplexModel({
+            ModelData{ (parentDir + "\\resources\\zelda\\eyes.obj").c_str(), (parentDir + "\\resources\\zelda\\textures\\eyes_diff.png").c_str() },
+            ModelData{ (parentDir + "\\resources\\zelda\\hair.obj").c_str(), (parentDir + "\\resources\\zelda\\textures\\hair_diff.png").c_str() },
+            ModelData{ (parentDir + "\\resources\\zelda\\mouth.obj").c_str(), (parentDir + "\\resources\\zelda\\textures\\zelda_diff.png").c_str() },
+            ModelData{ (parentDir + "\\resources\\zelda\\sheikaSlate.obj").c_str(), (parentDir + "\\resources\\zelda\\textures\\misc_diff.png").c_str()},
+            ModelData{ (parentDir + "\\resources\\zelda\\terrain.obj").c_str(), (parentDir + "\\resources\\zelda\\textures\\setCave_diff.png").c_str()},
+            ModelData{ (parentDir + "\\resources\\zelda\\torch.obj").c_str(), (parentDir + "\\resources\\zelda\\textures\\misc_diff.png").c_str()},
+            ModelData{ (parentDir + "\\resources\\zelda\\fire.obj").c_str(), (parentDir + "\\resources\\zelda\\textures\\fire_diff.png").c_str() },
+        }));
 
     p_point_light = std::make_unique<PointLight>(glm::vec3(-1, 4, 3));
-    p_point_light->init_shader(p_model_rei_obj->get_shader_program());
-    
-    p_shape_model_rei_stl = std::make_unique<Model>(
-        (parentDir + "\\resources\\rei-full-character-and-base.stl").c_str());
-    p_shape_model_rei_stl->set_rotation({0, -45, 0});
-    p_shape_model_rei_stl->set_location({ 0, 1.1f, -1.0f });
-    p_shape_model_rei_stl->set_scale({ model_scale, model_scale, model_scale });
-
-
+    p_point_light->init_shader(zelda->get_shader_program());
     return 0;
 }
 
@@ -206,55 +195,24 @@ void Window::on_update()
 
     p_camera->inputs();
     p_camera->update_matrix(45.0f, 0.1f, 100.0f);
-    //static float angle = 0.0f;
-    //angle += 0.01f;
-    
-    //p_camera->matrix(45.0f, 0.1f, 100.0f, p_cone->getShaderProgram(), "camMatrix");
-    //p_cone->rotate(glm::vec3{ 1,1,0 }, 0.01f);
 
-    //p_camera->matrix(45.0f, 0.1f, 100.0f, p_cylinder->getShaderProgram(), "camMatrix");
-    //p_cylinder->rotate_render(glm::vec3{ 1,0,0 }, 0.01f);
-
-    //p_camera->matrix(45.0f, 0.1f, 100.0f, p_trapezoid->getShaderProgram(), "camMatrix");
-    //p_trapezoid->rotate(glm::vec3{ 0,0,1 }, 0.01f);
-
-    //p_camera->matrix(45.0f, 0.1f, 100.0f, p_torus->getShaderProgram(), "camMatrix");
-    //p_torus->rotate(glm::vec3{ 0,0,1 }, 0.01f);
-    
-    //p_camera->matrix(45.0f, 0.1f, 100.0f, p_spiral->getShaderProgram(), "camMatrix");
-    //p_spiral->rotate(glm::vec3{ 0,0,1 }, 0.0f);
-
-
-    static glm::vec3 scale = p_model_rei_obj->get_scale();
-    static glm::vec3 rotation = p_model_rei_obj->get_rotation();
-    static glm::vec3 location = p_model_rei_obj->get_location();
+    static glm::vec3 scale = zelda->get_scale();
+    static glm::vec3 rotation = zelda->get_rotation();
+    static glm::vec3 location = zelda->get_location();
     static glm::vec3 light_position = p_point_light->get_position();
     ImGui::InputFloat3("Scale", glm::value_ptr(scale));
     ImGui::InputFloat3("Rotation", glm::value_ptr(rotation));
     ImGui::InputFloat3("Location", glm::value_ptr(location));
     ImGui::InputFloat3("Light Position", glm::value_ptr(light_position));
     p_point_light->set_position(light_position);
+    zelda->set_scale(scale);
+    zelda->set_location(location);
+    zelda->set_rotation(rotation);
 
-    p_model_rei_obj->set_scale(scale);
-    p_model_rei_obj->set_location(location);
-    p_model_rei_obj->set_rotation(rotation);
-    p_camera->set_matrix(p_model_rei_obj->get_shader_program(), "view_matrix");
-    p_camera->set_position(p_model_rei_obj->get_shader_program(), "cameraPos");
-    p_point_light->update_shader(p_model_rei_obj->get_shader_program());
-    p_model_rei_obj->render();
-    
-    p_camera->set_matrix(p_shape_model_rei_stl->get_shader_program(), "view_matrix");
-    p_point_light->update_shader(p_shape_model_rei_stl->get_shader_program());
-    p_shape_model_rei_stl->render();
-    
 
-    p_camera->set_matrix(p_shape_triangle_cube->get_shader_program(), "view_matrix");
-    p_point_light->update_shader(p_shape_triangle_cube->get_shader_program());
-    p_shape_triangle_cube->render();
-
-    p_camera->set_matrix(p_shape_cube->get_shader_program(), "view_matrix");
-    p_point_light->update_shader(p_shape_cube->get_shader_program());
-    p_shape_cube->render();
+    zelda->UpdateCamera(*p_camera, "view_matrix", "cameraPos");
+    zelda->UpdateLight(*p_point_light);
+    zelda->Render();
 
     ImGui::End();
     ImGui::Render();

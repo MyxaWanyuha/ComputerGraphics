@@ -47,19 +47,8 @@ private:
     float m_background_color[4] = {0.271f, 0.232f, 0.451f, 1.f};
 
     std::unique_ptr<class Camera> p_camera;
-
-    std::unique_ptr<class Cone> p_cone;
-    std::unique_ptr<class Cylinder> p_cylinder;
-    std::unique_ptr<class Trapezoid> p_trapezoid;
-    std::unique_ptr<class Torus> p_torus;
-    std::unique_ptr<class Spiral> p_spiral;
-
-    std::unique_ptr<class Cube> p_shape_cube;
-    std::unique_ptr<class TriangleCube> p_shape_triangle_cube;
-
-    std::unique_ptr<class Model> p_model_rei_obj;
-    std::unique_ptr<class Model> p_shape_model_rei_stl;
     std::unique_ptr<class PointLight> p_point_light;
+    std::unique_ptr<class ComplexModel> zelda;
 };
 
 }
