@@ -219,4 +219,13 @@ namespace SimpleEngine
                 nullptr);
         }
     }
+
+    void Model::set_material(const Material& new_material)
+    {
+        material.set_ambient(new_material.get_ambient());
+        material.set_diffuse(new_material.get_diffuse());
+        material.set_specular(new_material.get_specular());
+        material.set_diffuseTex(new_material.get_diffuseTex());
+        material.set_specularTex(new_material.get_specularTex());
+    }
 }

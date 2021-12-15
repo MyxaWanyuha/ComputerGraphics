@@ -204,17 +204,43 @@ void Window::on_update()
     ImGui::InputFloat3("Rotation", glm::value_ptr(rotation));
     ImGui::InputFloat3("Location", glm::value_ptr(location));
     ImGui::InputFloat3("Light Position", glm::value_ptr(light_position));
+    ImGui::End();
     p_point_light->set_position(light_position);
     zelda->set_scale(scale);
     zelda->set_location(location);
     zelda->set_rotation(rotation);
 
+    int i = 0;
+    auto make_material_edit_widget = [&](const std::string& name, int number)
+    {
+        ImGui::Begin(name.c_str());
+        const auto& material = zelda->get_material(number);
+        glm::vec3 l_ambient = material.get_ambient();
+        glm::vec3 l_diffuse = material.get_diffuse();
+        glm::vec3 l_specular = material.get_specular();
+        GLint	  l_diffuseTex = material.get_diffuseTex();
+        GLint	  l_specularTex = material.get_specularTex();
+        ImGui::InputFloat3("Ambient", glm::value_ptr(l_ambient));
+        ImGui::InputFloat3("Diffuse", glm::value_ptr(l_diffuse));
+        ImGui::InputFloat3("Specular", glm::value_ptr(l_specular));
+        ImGui::InputInt("DiffuseTex", &l_diffuseTex);
+        ImGui::InputInt("SpecularTex", &l_specularTex);
+        zelda->set_material(Material(l_ambient, l_diffuse, l_specular, l_diffuseTex, l_specularTex), number);
 
-    zelda->UpdateCamera(*p_camera, "view_matrix", "cameraPos");
-    zelda->UpdateLight(*p_point_light);
+        ImGui::End();
+    };
+    make_material_edit_widget("eyes", i++);
+    make_material_edit_widget("hair", i++);
+    make_material_edit_widget("mouth", i++);
+    make_material_edit_widget("sheikaSlate", i++);
+    make_material_edit_widget("terrain", i++);
+    make_material_edit_widget("torch", i++);
+    make_material_edit_widget("fire", i++);
+
+    zelda->update_camera(*p_camera, "view_matrix", "cameraPos");
+    zelda->update_light(*p_point_light);
     zelda->Render();
 
-    ImGui::End();
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 

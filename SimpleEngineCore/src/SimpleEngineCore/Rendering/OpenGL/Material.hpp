@@ -44,12 +44,25 @@ public:
 		uniform_loc_specularTex		= program.get_uniform_location("material.specularTex");
 	}
 
+	glm::vec3	get_ambient() const noexcept { return ambient; }
+	glm::vec3	get_diffuse() const noexcept { return diffuse; }
+	glm::vec3	get_specular() const noexcept { return specular; }
+	GLint		get_diffuseTex() const noexcept { return diffuseTex; }
+	GLint		get_specularTex() const noexcept { return specularTex; }
+
+	void set_ambient(glm::vec3	new_ambient)	 { ambient = new_ambient; }
+	void set_diffuse(glm::vec3	new_diffuse)	 { diffuse = new_diffuse; }
+	void set_specular(glm::vec3	new_specular)	 { specular = new_specular; }
+	void set_diffuseTex(GLint	new_diffuseTex)  { diffuseTex = new_diffuseTex; }
+	void set_specularTex(GLint	new_specularTex) { specularTex = new_specularTex; }
+
 private:
 	glm::vec3	ambient;
 	glm::vec3	diffuse;
 	glm::vec3	specular;
 	GLint		diffuseTex;
 	GLint		specularTex;
+
 	i32 uniform_loc_ambient = -1;
 	i32 uniform_loc_diffuse = -1;
 	i32 uniform_loc_specular = -1;

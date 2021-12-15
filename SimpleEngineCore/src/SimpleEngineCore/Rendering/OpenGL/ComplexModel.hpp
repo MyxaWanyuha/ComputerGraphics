@@ -22,17 +22,23 @@ public:
 	ComplexModel(const std::vector<ModelData>& model_paths);
 	void Render();
 
+	void set_material(const Material& new_material, size_t number);
+	const Material& get_material(size_t number) const noexcept;
+
+	size_t get_models_count() const noexcept { return models.size(); }
+
 	glm::vec3 get_scale() const noexcept { return scale; }
 	glm::vec3 get_location() const noexcept { return location; }
 	glm::vec3 get_rotation() const noexcept { return rotation; }
-
+	
 	void set_scale(glm::vec3 new_scale);
 	void set_location(glm::vec3 new_location);
 	void set_rotation(glm::vec3 new_rotation);
 
-	void UpdateCamera(const Camera& camera, const std::string& view_name, const std::string& pos_name) const;
-	void UpdateLight(const Light& light) const;
+	void update_camera(const Camera& camera, const std::string& view_name, const std::string& pos_name) const;
+	void update_light(const Light& light) const;
 	const ShaderProgram& get_shader_program() const { return models[0]->get_shader_program(); }
+	
 private:
 	std::vector<std::unique_ptr<Model>> models;
 	glm::vec3 scale{ 1.f, 1.f, 1.f };

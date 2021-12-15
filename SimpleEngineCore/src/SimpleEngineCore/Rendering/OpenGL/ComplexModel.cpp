@@ -18,6 +18,16 @@ namespace SimpleEngine
 		}
 	}
 
+	void ComplexModel::set_material(const Material& new_material, size_t number)
+	{
+		models[number]->set_material(new_material);
+	}
+
+	const Material& ComplexModel::get_material(size_t number) const noexcept
+	{
+		return models[number]->get_material();
+	}
+
 	void ComplexModel::set_scale(glm::vec3 new_scale)
 	{
 		for (auto& e : models)
@@ -42,7 +52,7 @@ namespace SimpleEngine
 		}
 	}
 
-	void ComplexModel::UpdateCamera(const Camera& camera, const std::string& view_name, const std::string& pos_name) const
+	void ComplexModel::update_camera(const Camera& camera, const std::string& view_name, const std::string& pos_name) const
 	{
 		for (auto& e : models)
 		{
@@ -51,7 +61,7 @@ namespace SimpleEngine
 		}
 	}
 
-	void ComplexModel::UpdateLight(const Light& light) const
+	void ComplexModel::update_light(const Light& light) const
 	{
 		for (auto& e : models)
 		{

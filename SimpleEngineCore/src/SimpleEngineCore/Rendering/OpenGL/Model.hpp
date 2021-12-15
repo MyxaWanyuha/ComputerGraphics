@@ -25,6 +25,9 @@ public:
     virtual ~Model() override = default;
     virtual void render() override;
     const ShaderProgram& get_shader_program() const { return *m_p_shader_program; }
+    
+    void set_material(const Material& new_material);
+    const Material& get_material()const noexcept { return material; }
 
     Model& operator=(const Model&) = delete;
     Model& operator=(Model&&) = delete;
