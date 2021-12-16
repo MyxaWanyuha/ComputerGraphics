@@ -173,6 +173,10 @@ i32 Window::init()
             ModelData{ (parentDir + "\\resources\\zelda\\fire.obj").c_str(), (parentDir + "\\resources\\zelda\\textures\\fire_diff.png").c_str() },
         }));
 
+    zelda->set_material(Material(glm::vec3(1.f)), 6);
+    zelda->set_material(Material(glm::vec3(0.1f), glm::vec3(1.f), glm::vec3(1.f), 0, 0), 2);
+    zelda->set_location({ 0, -1, -1 });
+
     p_point_light = std::make_unique<PointLight>(glm::vec3(-1, 4, 3));
     p_point_light->init_shader(zelda->get_shader_program());
     return 0;

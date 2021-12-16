@@ -34,6 +34,7 @@ namespace SimpleEngine
 		{
 			e->set_scale(new_scale);
 		}
+		scale = new_scale;
 	}
 
 	void ComplexModel::set_location(glm::vec3 new_location)
@@ -42,6 +43,7 @@ namespace SimpleEngine
 		{
 			e->set_location(new_location);
 		}
+		location = new_location;
 	}
 
 	void ComplexModel::set_rotation(glm::vec3 new_rotation)
@@ -50,6 +52,7 @@ namespace SimpleEngine
 		{
 			e->set_rotation(new_rotation);
 		}
+		rotation = new_rotation;
 	}
 
 	void ComplexModel::update_camera(const Camera& camera, const std::string& view_name, const std::string& pos_name) const
